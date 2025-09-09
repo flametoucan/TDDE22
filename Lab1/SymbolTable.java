@@ -75,18 +75,54 @@ public class SymbolTable {
      * TODO: implement the put method.
      */
     public void put(String key, Character val) {
-	return;
+    	
+    	int index = hash(key);
+    	int startPosition = index; 
+    	if(keys[index] == null) {
+    		keys[index] = key;
+    		vals[index] = val;
+    	}else {
+    		while(keys[index] != null) {
+    			index+=1;
+    			index = index % maxSize;
+    			if(key.equals(keys[index])) {
+    				vals[index] = val;
+    				return;
+    			}
+    			if(index==startPosition) {
+    				System.out.println("Listan är fullare än mig!");
+    				return;
+    			}    		
+    		}
+    		
+    		keys[index] = key;
+    		vals[index] = val;
+    	}
+    	
+    	/*indexera vart värdet ska vara (k
+    	 * flytta pekare dit vi vill sätta in värdet (k
+    	 * checka om platsen är tom
+    	 * om ja sätt in värdet
+    	 * om nej flytta pekare till nästa
+    	 * kolla om den är tom
+    	 * om ja, bla vbla bla
+    	 * fortsätt tills värdet är insatt eller tillbaka på startpos
+    	 * 
+    	 * 
+    	 * */
+    	return;
     } 
-
+   
     /**
      * Return the value associated with the given key, null if no such
      * value.
      * TODO: implement the get method.
      */
     public Character get(String key) {
-	return null;
+    	
+    	return null;
     } 
-
+    
     /**
      * Delete the key (and associated value) from the symbol table.
      * TODO: implement the delete method.
