@@ -78,17 +78,28 @@ public class SymbolTable {
     	
     	int index = hash(key);
     	int startPosition = index; 
+        if(val == null){
+            delete(key);
+            return
+        }
+
     	if(keys[index] == null) {
     		keys[index] = key;
     		vals[index] = val;
     	}else {
     		while(keys[index] != null) {
-    			index+=1;
+    			if(keys[index] == key){
+                    vals[index] = val;
+                    return
+                }
+
+                index+=1;
     			index = index % maxSize;
     			if(key.equals(keys[index])) {
     				vals[index] = val;
     				return;
     			}
+
     			if(index==startPosition) {
     				System.out.println("Listan är fullare än mig!");
     				return;
@@ -99,14 +110,18 @@ public class SymbolTable {
     		vals[index] = val;
     	}
     	
-    	/*indexera vart värdet ska vara (k
+    	/* Att göra (k)=klart
+         * indexera vart värdet ska vara (k
     	 * flytta pekare dit vi vill sätta in värdet (k
-    	 * checka om platsen är tom
-    	 * om ja sätt in värdet
-    	 * om nej flytta pekare till nästa
-    	 * kolla om den är tom
-    	 * om ja, bla vbla bla
-    	 * fortsätt tills värdet är insatt eller tillbaka på startpos
+    	 * checka om platsen är tom (k)
+    	 * om ja sätt in värdet (k)
+    	 * om nej flytta pekare till nästa (k)
+    	 * kolla om den är tom (k)
+    	 * om ja, bla vbla bla (k)
+    	 * fortsätt tills värdet är insatt eller tillbaka på startpos (k
+         * 
+         * om key redan finns ska val updateras till det nya värdet (k)
+         * om val är null ska delete(key) kallas på (k)
     	 * 
     	 * 
     	 * */
@@ -119,7 +134,10 @@ public class SymbolTable {
      * TODO: implement the get method.
      */
     public Character get(String key) {
-    	
+    	/** Att göra (k)=klart
+         * 
+         * 
+         */
     	return null;
     } 
     
