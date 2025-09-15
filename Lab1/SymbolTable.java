@@ -80,7 +80,7 @@ public class SymbolTable {
     	int startPosition = index; 
         if(val == null){
             delete(key);
-            return
+            return;
         }
 
     	if(keys[index] == null) {
@@ -89,15 +89,17 @@ public class SymbolTable {
     	}else {
     		while(keys[index] != null) {
     			if(keys[index] == key){
-                    vals[index] = val;
-                    return
+                    vals[index].equals(val);
+                    size++;
+                    return;
                 }
 
                 index+=1;
     			index = index % maxSize;
     			if(key.equals(keys[index])) {
     				vals[index] = val;
-    				return;
+                    size++;
+    				return ;
     			}
 
     			if(index==startPosition) {
@@ -125,6 +127,7 @@ public class SymbolTable {
     	 * 
     	 * 
     	 * */
+        size++;
     	return;
     } 
    
@@ -138,7 +141,31 @@ public class SymbolTable {
          * 
          * 
          */
-    	return null;
+        int index = hash(key);
+        int startPosition = index; 
+
+        if(key.equals(null)){
+            System.out.println("fucking null key");
+            return null;
+        }
+
+        if(keys[index] == null){
+            return null;
+        }
+
+
+        if(keys[index].equals(key)){
+            return vals[index];
+        }
+        while(!keys[index].equals(key)){// ! betyder sålänge detta är faskt
+            index=+1;
+            index = index % maxSize;
+            if(index == startPosition){
+                System.out.println("key finns inte din dumstrut");
+                return null;
+            }
+        } 
+        return vals[index];
     } 
     
     /**
@@ -146,6 +173,44 @@ public class SymbolTable {
      * TODO: implement the delete method.
      */
     public void delete(String key) {
+
+        int index = hash(key);
+        int startPosition = index; 
+
+        if(key.equals(null)){
+            System.out.println("fucking null key");
+            return;
+        }
+
+        if(keys[index] == null){
+            return;
+        }
+        
+        while(!keys[index].equals(key)){
+            index=+1;
+            index = index % maxSize;
+            if(index == startPosition){
+                System.out.println("key finns inte din dumstrut");
+                return;
+            }
+        }
+
+        keys[index] = null;
+        vals[index] = null;
+        size--;
+        index=+1;
+            index = index % maxSize;
+
+        while(index != startPosition){ //flytt tiullbaka grej
+            if(keys[index] == null){
+                return;
+            }
+            size--;
+            put(keys[index], vals[index]);
+            
+            index=+1;
+            index = index % maxSize;   
+        }
 	return;
     } 
 
