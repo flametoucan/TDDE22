@@ -97,7 +97,7 @@ public class SymbolTable {
             index = index % maxSize;
 
             if(index==startPosition) {
-                System.out.println("Listan är fullare än mig!");
+                System.out.println("Listan är full!");
                 return;
             }    		
         }

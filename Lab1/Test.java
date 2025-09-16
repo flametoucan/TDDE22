@@ -55,6 +55,11 @@ public class Test {
             }
         }
 
+        st.put("sko", null);
+
+        if(st.contains("sko") == true){
+            System.out.println("tar inte bort om  key updateras med null.");
+        }
         st.delete("sko");
 
         st.put("hej", 'h');
@@ -116,6 +121,6 @@ public class Test {
         if(st.get("cuh") != 'c' || st.get("hcu") != 'h'){
             System.out.println("Error: Expected 'c', 'h' but got " + st.get("cuh") + ", " + ", " + st.get("hcu"));
         }
-        System.out.println("all kod körs iaf");
+        System.out.println("all kod körs");
     }
 }
