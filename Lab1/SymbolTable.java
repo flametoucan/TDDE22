@@ -64,7 +64,7 @@ public class SymbolTable {
 	int v = 0;
 
 	for (i = 0; i < key.length(); i++) {
-	    v += key.charAt(i);
+        v += key.charAt(i);
 	}
 	return v % maxSize;
     }
@@ -74,13 +74,13 @@ public class SymbolTable {
      * 
      */
     public void put(String key, Character val) {
-    	
+
         if(key == null){
             return;
         }
 
-    	int index = hash(key);
-    	int startPosition = index; 
+        int index = hash(key);
+        int startPosition = index; 
 
         if(val == null){
             delete(key);
@@ -107,17 +107,14 @@ public class SymbolTable {
     size++;
     return;
     } 
-   
+
     /**
      * Return the value associated with the given key, null if no such
      * value.
      * 
      */
     public Character get(String key) {
-    	/** Att göra (k)=klart
-         * 
-         * 
-         */
+
         int index = hash(key);
         int startPosition = index; 
 
@@ -211,15 +208,15 @@ public class SymbolTable {
 	String str = "";
 
 	for (int i = 0; i < maxSize; i++) {
-	    str = str + i + ". " + vals[i];
-	    if (keys[i] != null) {
-		str = str + " " + keys[i] + " (";
-		str = str + hash(keys[i]) + ")";
-	    } else {
-		str = str + " -";
-	    }
-	    System.out.println(str);
-	    str = "";
-	}
+        str = str + i + ". " + vals[i];
+        if (keys[i] != null) {
+            str = str + " " + keys[i] + " (";
+            str = str + hash(keys[i]) + ")";
+        } else {
+            str = str + " -";
+        }
+        System.out.println(str);
+        str = "";
+        }
     }
 }

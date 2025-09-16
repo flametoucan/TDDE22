@@ -22,7 +22,7 @@ public class Test {
             System.out.println(e);
         }
         
-       st.put("volvo", 'v');
+        st.put("volvo", 'v');
 
         if(st.contains("volvo") == false){
             System.out.println("put fungerar ej lol!!!!!! B)");
@@ -76,7 +76,6 @@ public class Test {
             System.out.println("some part of the hashprocess does not work");
         }
         }catch(NullPointerException e){
-
         }
 
         st.delete("hej");
@@ -88,7 +87,7 @@ public class Test {
         st.put("hcu", 'h');
 
         st.put("uhc", 'd');
-         if(st.contains("uhc") == false){
+        if(st.contains("uhc") == false){
             st.dump();
             //syso
             System.out.println("put does not update key correctly");
