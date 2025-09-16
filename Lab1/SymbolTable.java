@@ -75,46 +75,37 @@ public class SymbolTable {
      */
     public void put(String key, Character val) {
     	
-    	int index = hash(key);
-    	int startPosition = index; 
-
         if(key == null){
             return;
         }
+
+    	int index = hash(key);
+    	int startPosition = index; 
 
         if(val == null){
             delete(key);
             return;
         }
 
-    	/*if(keys[index] == null) {
-    		keys[index] = key;
-    		vals[index] = val;
-    	}else {*/
-    		while(keys[index] != null) {
-    			if(key.equals(keys[index])){
-                    vals[index] = val;
-                    return;
-                }
+        while(keys[index] != null) {
+            if(key.equals(keys[index])){
+                vals[index] = val;
+                return;
+            }
 
-                index+=1;
-    			index = index % maxSize;
-    			/*if(key.equals(keys[index])) {
-    				vals[index] = val;
-    				return ;
-    			}*/
+            index++;
+            index = index % maxSize;
 
-    			if(index==startPosition) {
-    				System.out.println("Listan är fullare än mig!");
-    				return;
-    			}    		
-    		}
-    		
-    		keys[index] = key;
-    		vals[index] = val;
-            size++;
-    	/* }*/
-    	return;
+            if(index==startPosition) {
+                System.out.println("Listan är fullare än mig!");
+                return;
+            }    		
+        }
+        
+    keys[index] = key;
+    vals[index] = val;
+    size++;
+    return;
     } 
    
     /**
@@ -130,7 +121,7 @@ public class SymbolTable {
         int index = hash(key);
         int startPosition = index; 
 
-        if(key.equals(null)){
+        if(key == null){
             System.out.println("fucking null key");
             return null;
         }
@@ -145,8 +136,12 @@ public class SymbolTable {
         }
 
         while(!keys[index].equals(key)){// ! betyder sålänge detta är faskt
-            index=+1;
+            index++;
             index = index % maxSize;
+            if(keys[index] == null){
+                return null;
+            }
+            //System.out.println(index + " print index for " + key);
             if(index == startPosition){
                 System.out.println(key + " finns inte vid get");
                 return null; //här dör allt när det returnas
@@ -164,7 +159,7 @@ public class SymbolTable {
         int index = hash(key);
         int startPosition = index; 
 
-        if(key.equals(null)){
+        if(key == null){
             System.out.println("fucking null key");
             return;
         }
@@ -174,7 +169,7 @@ public class SymbolTable {
         }
         
         while(!keys[index].equals(key)){
-            index=+1;
+            index++;
             index = index % maxSize;
             if(index == startPosition){
                 System.out.println(key + " finns inte vid delete");
@@ -185,17 +180,25 @@ public class SymbolTable {
         keys[index] = null;
         vals[index] = null;
         size--;
-        index=+1;
-            index = index % maxSize;
+        index++;
+        index = index % maxSize;
 
         while(index != startPosition){ //flytt tillbaka grej
             if(keys[index] == null){
                 return;
             }
+
             size--;
-            put(keys[index], vals[index]);
+
+            String keysOld = keys[index];
+            keys[index] = null;
+            char valsOld = vals[index];
+            vals[index] = null;
+
+            put(keysOld, valsOld);
             
-            index=+1;
+            
+            index++;
             index = index % maxSize;   
         }
 	return;

@@ -19,7 +19,7 @@ public class Test {
             st.put( null,'b');
         } catch(NullPointerException e){
             //en syso här som sgäer att man försöker sätta in key med null namn
-            System.out.println("Försökte sätta in en null-nyckel!");
+            System.out.println(e);
         }
         
        st.put("volvo", 'v');
@@ -106,16 +106,17 @@ public class Test {
         if(st.size() != st.size()){
             System.out.println("Error: Expected size " + st.size() + "  but got " + st.size() + "  #id:5522");
         }
-        st.dump();
+
         st.delete("uhc");
+        System.out.println();
         if(st.contains("cuh") != true || st.contains("hcu") != true){
             System.out.println("Deletion is wrong");
         }
+
         System.out.println("-----------------------------------------------------");
-        if(st.get("hej") != 'h' || st.get("jhe") != 'j'){
-            System.out.println("Error: Expected 'h', 'j' but got " + st.get("hej") + ", " + ", " + st.get("jhe"));
+        if(st.get("cuh") != 'c' || st.get("hcu") != 'h'){
+            System.out.println("Error: Expected 'c', 'h' but got " + st.get("cuh") + ", " + ", " + st.get("hcu"));
         }
         System.out.println("all kod körs iaf");
-        
     }
 }
