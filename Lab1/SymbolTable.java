@@ -1,4 +1,3 @@
-
 /** 
  * This class represents a symbol table, or hash table, with a very
  * simple hash function. Observe that you are not supposed to change
