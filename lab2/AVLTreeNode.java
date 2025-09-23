@@ -80,23 +80,52 @@ public class AVLTreeNode<T extends Comparable<T>> {
     public AVLTreeNode<T> insert(T data) {	
 	if (data.compareTo(element) < 0) {
 	    // the key we insert is smaller than the current node
-	    if (left == null) {
+        if (left == null) {
 		left = new AVLTreeNode<>(data);
-	    } else {
+        } else {
 		left = left.insert(data);
-	    }
+        }
 	} else if (element.compareTo(data) < 0) {
 	    // the key we insert is greater than the current node
-	    if (right == null) {
+        if (right == null) {
 		right = new AVLTreeNode<>(data);
-	    } else {
+        } else {
 		right = right.insert(data);
-	    }
+        }
 	} else {
-	    throw new AVLTreeException("Element already exists.");
+        throw new AVLTreeException("Element already exists.");
 	}
-	return this;
+
+    calculateHeight(this);
+
+	return checkForRotation(this);
     }
+
+    private AVLTreeNode<T> checkForRotation(AVLTreeNode<T> data) {
+
+        if(this.nodeHeight(left)-this.nodeHeight(right) > 1) { //left rotation
+            if(left.left == null) {
+                return doubleRotationWithLeftChild(data);
+            }
+            if(this.nodeHeight(left.left)<this.nodeHeight(left.right)) {
+                return doubleRotationWithLeftChild(data);
+            }
+            return singleRotationWithLeftChild(data);
+        } else if(this.nodeHeight(left)-this.nodeHeight(right) < -1) {
+            if(right.right == null) {
+                
+                return doubleRotationWithRightChild(data);
+            }
+            if(this.nodeHeight(right.left) > this.nodeHeight(right.right)) {
+                return doubleRotationWithRightChild(data);
+            }
+            return singleRotationWithRightChild(data);
+        } else {
+            return data;
+        }
+    }
+
+
 
     /**
      * Returns the height of (sub) tree node.
@@ -256,6 +285,16 @@ public class AVLTreeNode<T extends Comparable<T>> {
     //                              ROTATIONS                                 //
     //                                                                        //
     ////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * check hight of children
+     * compare left/right
+     * bigger left, smaller right
+     * 
+     * 
+     * */
+    
+
 
 
     /**
