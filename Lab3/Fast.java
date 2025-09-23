@@ -97,6 +97,25 @@ public class Fast {
 	//                     any functions. Good luck!                    //
 	//////////////////////////////////////////////////////////////////////
 
+        int count = points.size();
+
+        for (int i = 0; i < count - 3; ++i) {
+            for (int j = i + 1; j < count - 2; ++j) {
+                renderLine(frame, points.get(i), points.get(j));
+            }
+        }
+/*
+ * Choose the first point (p) given in the .txt file to start with
+ * Choose the next given point (q) to check the angle against
+ * Repeat this for every point after q then change p to the next given point
+ * Choose q the same way as the first time and go down the list of given numbers
+ * When every point has been p you should have a list formatted like "[p],[q],[angle]"
+ * Now sort the list you have
+ * check for p that have at least 4 different q with the same angle, for each that do, render its line in the format "renderLine(frame, points.get(p), points.get(q))"
+ */
+
+
+
         long end = System.currentTimeMillis();
         System.out.println("Computing all the line segments took: " + (end-start) + " milliseconds.");
     }
@@ -115,9 +134,9 @@ public class Fast {
             } else if (a.lessThan(b)) {
 		// a is "less" than b.
 		return -1;
-	    }
+        }
 	    // our two points are equal.
-	    return 0;
+        return 0;
         }
     }
 }
