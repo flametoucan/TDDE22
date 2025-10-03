@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Scanner;
+import java.util.List;
+
 
 /**
  * Brute force solution. To run: java brute.java < input.txt
@@ -61,11 +63,11 @@ public class Fast {
         Scanner input = null;
         File f;
         ArrayList<Point> points;
+        ArrayList<Point> listOfPoints;
+        ArrayList<Point> listOfLinkedPoints;
 
         if (args.length != 1) {
-            System.out.println("Usage: java Brute <input.txt>\n" +
-			       "Replace <input.txt> with your input file of preference, and possibly the path.\n" +
-			       "Ex: java Brute data/input1000.txt");
+            System.out.println("Usage: java Brute <input.txt>\n" + "Replace <input.txt> with your input file of preference, and possibly the path.\n" + "Ex: java Brute data/input1000.txt");
             System.exit(0);
         }
 
@@ -98,23 +100,31 @@ public class Fast {
 	//////////////////////////////////////////////////////////////////////
 
         int count = points.size();
+        Point p;
+        int i;
+        int j;
 
-        for (int i = 0; i < count - 3; ++i) {
-            for (int j = i + 1; j < count - 2; ++j) {
-                renderLine(frame, points.get(i), points.get(j));
+        listOfLinkedPoints = new ArrayList<>(points);
+        listOfPoints = new ArrayList<>(points);
+
+        for(i = 0; i < count; i++){
+            p = points.get(i);
+            Collections.sort(listOfPoints, new NaturalOrderComparatorAngle(p));
+            for(j = 1; j < count-4; j++){
+                listOfLinkedPoints.clear();
+                if(p.slopeTo(listOfPoints.get(j)) == p.slopeTo(listOfPoints.get(j+1)) && p.slopeTo(listOfPoints.get(j)) == p.slopeTo(listOfPoints.get(j+2)) && p.slopeTo(listOfPoints.get(j+1)) == p.slopeTo(listOfPoints.get(j+4))){
+                    listOfLinkedPoints.add(points.get(j+1));
+                    listOfLinkedPoints.add(points.get(j+2));
+                    listOfLinkedPoints.add(points.get(j+3));
+                    listOfLinkedPoints.add(points.get(j+4));
+                    Collections.sort(listOfLinkedPoints, new NaturalOrderComparatorAngle(p));
+                    renderLine(frame, p, listOfPoints.get(j+1));
+                    renderLine(frame, p, listOfPoints.get(j+2));
+                    renderLine(frame, p, listOfPoints.get(j+3));
+                    renderLine(frame, p, listOfPoints.get(j+4));
+                }
             }
         }
-/*
- * Choose the first point (p) given in the .txt file to start with
- * Choose the next given point (q) to check the angle against
- * Repeat this for every point after q then change p to the next given point
- * Choose q the same way as the first time and go down the list of given numbers
- * When every point has been p you should have a list formatted like "[p],[q],[angle]"
- * Now sort the list you have
- * check for p that have at least 4 different q with the same angle, for each that do, render its line in the format "renderLine(frame, points.get(p), points.get(q))"
- */
-
-
 
         long end = System.currentTimeMillis();
         System.out.println("Computing all the line segments took: " + (end-start) + " milliseconds.");
@@ -127,6 +137,7 @@ public class Fast {
      * and can contain data and other methods if you deem it useful.
      */
     private static class NaturalOrderComparator implements Comparator<Point> {
+        
         public int compare(Point a, Point b){
             if (a.greaterThan(b)) {
 		// a is "greater" than b.
@@ -134,6 +145,27 @@ public class Fast {
             } else if (a.lessThan(b)) {
 		// a is "less" than b.
 		return -1;
+        }
+	    // our two points are equal.
+        return 0;
+        }
+    }
+
+    private static class NaturalOrderComparatorAngle implements Comparator<Point> {
+
+        private Point p;
+
+        public NaturalOrderComparatorAngle(Point p){
+            this.p = p;
+        }
+        public int compare(Point a, Point b){
+
+            if ((double)p.slopeTo(a) < (double)p.slopeTo(b)) {
+		// a is "greater" than b.
+		return -1;
+            } else if ((double)p.slopeTo(a) > (double)p.slopeTo(b)) {
+		// a is "less" than b.
+		return 1;
         }
 	    // our two points are equal.
         return 0;
