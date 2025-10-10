@@ -99,36 +99,62 @@ public class Fast {
 	//                     any functions. Good luck!                    //
 	//////////////////////////////////////////////////////////////////////
 
-        int count = points.size();
-        Point p;
-        int i;
-        int j;
+        int n = points.size();
+        
+        // Precompute base array och work array (snabbare än att kopiera listor) tror inte man behöver 2 listor men funkade
+        Point[] base = points.toArray(new Point[0]);
+        Point[] work = new Point[n];
 
-        listOfLinkedPoints = new ArrayList<>(points);
-        listOfPoints = new ArrayList<>(points);
+        // Samla segment och rita efter beräkningen (minskar grafik-anrop under beräkning)
+        ArrayList<Point[]> segments = new ArrayList<>();
 
-        for(i = 0; i < count; i++){
-            p = points.get(i);
-            Collections.sort(listOfPoints, new NaturalOrderComparatorAngle(p));
-            for(j = 1; j < count-4; j++){
-                listOfLinkedPoints.clear();
-                if(p.slopeTo(listOfPoints.get(j)) == p.slopeTo(listOfPoints.get(j+1)) && p.slopeTo(listOfPoints.get(j)) == p.slopeTo(listOfPoints.get(j+2)) && p.slopeTo(listOfPoints.get(j+1)) == p.slopeTo(listOfPoints.get(j+4))){
-                    listOfLinkedPoints.add(points.get(j+1));
-                    listOfLinkedPoints.add(points.get(j+2));
-                    listOfLinkedPoints.add(points.get(j+3));
-                    listOfLinkedPoints.add(points.get(j+4));
-                    Collections.sort(listOfLinkedPoints, new NaturalOrderComparatorAngle(p));
-                    renderLine(frame, p, listOfPoints.get(j+1));
-                    renderLine(frame, p, listOfPoints.get(j+2));
-                    renderLine(frame, p, listOfPoints.get(j+3));
-                    renderLine(frame, p, listOfPoints.get(j+4));
+        for (int i = 0; i < n; i++) {
+            Point p = points.get(i);
+
+            // Kopiera in i arbetsbuffert och sortera efter lutning mot p, finns bättre lösning här men funkade
+            System.arraycopy(base, 0, work, 0, n);
+            java.util.Arrays.sort(work, new NaturalOrderComparatorAngle(p));
+
+            // Om p hamnar först (slope -INF), starta från index 1
+            final int len = work.length;
+            int j = (len > 0 && work[0] == p) ? 1 : 0;
+            while (j < len) {
+                // om färre än 3 punkter återstår kan vi inte bilda ett nytt segment
+                if (len - j < 3) break;
+                if (work[j] == p) { // hoppa över p om den dyker upp, ska inte ritas
+                    j++;
+                    continue;
                 }
+                double s = p.slopeTo(work[j]);
+                int k = j + 1;
+                while (k < len && Double.compare(p.slopeTo(work[k]), s) == 0) {
+                    k++;
+                }
+                int run = k - j; // antal punkter (exkl p) med samma lutning
+                if (run >= 3) {
+                    Point min = p, max = p;
+                    for (int t = j; t < k; t++) {
+                        Point q = work[t];
+                        if (q.lessThan(min)) min = q;
+                        if (q.greaterThan(max)) max = q;
+                    }
+                    if (p == min) {
+                        segments.add(new Point[]{min, max});
+                    }
+                }
+                j = k; // nästa lutningsgrupp
             }
         }
 
+        // Rita linjer efter beräkningen
+        for (Point[] seg : segments) {
+            renderLine(frame, seg[0], seg[1]);
+        }
+
         long end = System.currentTimeMillis();
-        System.out.println("Computing all the line segments took: " + (end-start) + " milliseconds.");
-    }
+                System.out.println("Computing all the line segments took: " + (end - start) + " milliseconds.");
+            }
+
 
     /**
      * Comparator class. Used to tell Collections.sort how to compare
@@ -137,39 +163,25 @@ public class Fast {
      * and can contain data and other methods if you deem it useful.
      */
     private static class NaturalOrderComparator implements Comparator<Point> {
-        
-        public int compare(Point a, Point b){
+        public int compare(Point a, Point b) {
             if (a.greaterThan(b)) {
-		// a is "greater" than b.
-		return 1;
+                return 1;
             } else if (a.lessThan(b)) {
-		// a is "less" than b.
-		return -1;
-        }
-	    // our two points are equal.
-        return 0;
+                return -1;
+            }
+            return 0;
         }
     }
 
     private static class NaturalOrderComparatorAngle implements Comparator<Point> {
-
         private Point p;
 
-        public NaturalOrderComparatorAngle(Point p){
+        public NaturalOrderComparatorAngle(Point p) {
             this.p = p;
         }
-        public int compare(Point a, Point b){
 
-            if ((double)p.slopeTo(a) < (double)p.slopeTo(b)) {
-		// a is "greater" than b.
-		return -1;
-            } else if ((double)p.slopeTo(a) > (double)p.slopeTo(b)) {
-		// a is "less" than b.
-		return 1;
-        }
-	    // our two points are equal.
-        return 0;
+        public int compare(Point a, Point b) {
+            return Double.compare(p.slopeTo(a), p.slopeTo(b));
         }
     }
 }
-

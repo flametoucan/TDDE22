@@ -1,35 +1,40 @@
 /**********************************************************************
- *  Mönsterigenkänning readme.txt
+ *  Mï¿½nsterigenkï¿½nning readme.txt
  **********************************************************************/
 
- Ungefärligt antal timmar spenderade på labben (valfritt):
+ Ungefï¿½rligt antal timmar spenderade pï¿½ labben (valfritt):
 
 /**********************************************************************
- *  Empirisk    Fyll i tabellen nedan med riktiga körtider i sekunder
- *  analys      när det känns vettigt att vänta på hela beräkningen.
- *              Ge uppskattningar av körtiden i övriga fall.
+ *  Empirisk    Fyll i tabellen nedan med riktiga kï¿½rtider i sekunder
+ *  analys      nï¿½r det kï¿½nns vettigt att vï¿½nta pï¿½ hela berï¿½kningen.
+ *              Ge uppskattningar av kï¿½rtiden i ï¿½vriga fall.
  *
  **********************************************************************/
     
-      N       brute       sortering
+      N       brute(s)      sortering(s)
  ----------------------------------
-    150
-    200
-    300
-    400
-    800
-   1600
-   3200
-   6400
-  12800
+    150       0.029         0.008
+    200       0.032         0.013
+    300       0.059         0.022
+    400       0.108         0.030
+    800       0.585         0.169
+   1600       3.833         0.454
+   3200       33.669        1.571
+   6400       401.683       6.395
+  12800       5716.974      29.553
 
+Endast de tvÃ¥ hÃ¶gsta vÃ¤rdena (6400 samt 12800) Ã¤r aproximerade fÃ¶r brute
 
 /**********************************************************************
- *  Teoretisk   Ge ordo-uttryck för värstafallstiden för programmen som
+ *  Teoretisk   Ge ordo-uttryck fï¿½r vï¿½rstafallstiden fï¿½r programmen som
  *  analys      en funktion av N. Ge en kort motivering.
  *
  **********************************************************************/
 
 Brute:
+Brute.java har en tidskomplexitet pÃ¥ O(N^4). Brute.java testar alla 4-kombinationer av punkter. Varje test Ã¤r O(1).
 
 Sortering:
+Fast.java har en mycket bÃ¤ttre tidskomplexitet pÃ¥ O(N^2 log N). I fast.java sorteras N - 1 punkter efter deras lutning fÃ¶r varje pivotpunkt 
+(O(N log N)) och kÃ¶rningar av lika lutningar skannar linjÃ¤rt vilket blir O(N). Detta upprepas fÃ¶r N stycken pivotpunkter vilket ger oss N * (N log N + N)
+Detta skrivs om till O(N^2 log N) vilket blir vÃ¥r slutgiltiga tidskomplexitet fÃ¶r fast.java
