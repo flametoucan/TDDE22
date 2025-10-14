@@ -24,7 +24,7 @@
             "request": "launch",
             "mainClass": "Fast",
             "projectName": "Lab3_acac067a",
-            "args": "data/mystery10089.txt"
+            "args": "data/grid5x5.txt"
         }
     ]
 }

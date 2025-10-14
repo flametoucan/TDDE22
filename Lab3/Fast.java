@@ -101,33 +101,28 @@ public class Fast {
 
         int n = points.size();
         
-        // Precompute base array och work array (snabbare än att kopiera listor) tror inte man behöver 2 listor men funkade
+        // Kopierar bara punkterna en gång istället för O(N^2) blir det nu endast O(N)
         Point[] base = points.toArray(new Point[0]);
         Point[] work = new Point[n];
-
-        // Samla segment och rita efter beräkningen (minskar grafik-anrop under beräkning)
-        ArrayList<Point[]> segments = new ArrayList<>();
 
         for (int i = 0; i < n; i++) {
             Point p = points.get(i);
 
-            // Kopiera in i arbetsbuffert och sortera efter lutning mot p, finns bättre lösning här men funkade
-            System.arraycopy(base, 0, work, 0, n);
-            java.util.Arrays.sort(work, new NaturalOrderComparatorAngle(p));
+            int w = 0;
+            for (int t = 0; t < n; t++) {
+                Point q = base[t];
+                if (q != p) work[w++] = q;
+            }
+            
+            java.util.Arrays.sort(work, 0, w, new NaturalOrderComparatorAngle(p));
 
-            // Om p hamnar först (slope -INF), starta från index 1
-            final int len = work.length;
-            int j = (len > 0 && work[0] == p) ? 1 : 0;
-            while (j < len) {
+            int j = 0;
+            while (j < w) {
                 // om färre än 3 punkter återstår kan vi inte bilda ett nytt segment
-                if (len - j < 3) break;
-                if (work[j] == p) { // hoppa över p om den dyker upp, ska inte ritas
-                    j++;
-                    continue;
-                }
+                if (w - j < 3) break;
                 double s = p.slopeTo(work[j]);
                 int k = j + 1;
-                while (k < len && Double.compare(p.slopeTo(work[k]), s) == 0) {
+                while (k < w && Double.compare(p.slopeTo(work[k]), s) == 0) {
                     k++;
                 }
                 int run = k - j; // antal punkter (exkl p) med samma lutning
@@ -139,16 +134,11 @@ public class Fast {
                         if (q.greaterThan(max)) max = q;
                     }
                     if (p == min) {
-                        segments.add(new Point[]{min, max});
+                        renderLine(frame, min, max);
                     }
                 }
                 j = k; // nästa lutningsgrupp
             }
-        }
-
-        // Rita linjer efter beräkningen
-        for (Point[] seg : segments) {
-            renderLine(frame, seg[0], seg[1]);
         }
 
         long end = System.currentTimeMillis();
