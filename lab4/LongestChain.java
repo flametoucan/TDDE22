@@ -15,9 +15,12 @@ class LongestChain {
 			       'ä', 'ö', 'é' };
     private int alphabetLength = alphabet.length;
 
+	private HashMap<String, WordRec> visitedMap; //minskar BFS
+
     public LongestChain(int wordLength) {
-	this.wordLength = wordLength;
-	q = new Queue();
+		this.wordLength = wordLength;
+		q = new Queue();
+		visitedMap = new HashMap<>();
     }
 
     /**
@@ -39,81 +42,100 @@ class LongestChain {
      * @return the goal word if it's found, null otherwise (WordRec)
      */ 
     private WordRec makeChildren(WordRec x) {
-	for (int i = 0; i < wordLength; i++) {
-	    for (int c = 0; c < alphabetLength; c++) {
-		if (alphabet[c] != x.getWord().charAt(i)) {
-		    String res = WordList.contains(x.getWord().substring(0,i) +
-						   alphabet[c] +
-						   x.getWord().substring(i+1));
-		    if (res != null && WordList.markAsUsedIfUnused(res)) {
-			WordRec wr = new WordRec(res, x);
-			if (isGoal(res)) {
-			    return wr;
+		char[] wordChars = x.getWord().toCharArray();
+		for (int i = 0; i < wordLength; i++) {
+			for (int c = 0; c < alphabetLength; c++) {
+				if (alphabet[c] != original) {
+					wordChars[i] = alphabet[c];
+					String candidate = new String(wordChars);
+					if (WordList.contains(candidate) != null && WordList.markAsUsedIfUnused(candidate)) {
+						wordRec wr = new WordRec(candidate, x);
+					}
+					if (isGoal(candidate)) {
+						return wr;
+					}
+					q.enqueue(wr);
+				}
 			}
-			q.enqueue(wr);
-		    }
 		}
-	    }
+		wordChars[i] = original;
 	}
 	return null;
-    }
+}
 
 
-    /**
-     * BreadthFirst perform a BFS from startWord to find the shortest
-     * path to endWord. The shortest path will be returned as a chain
-     * of word posts (WordRec). If there is no path between the two
-     * words, null will be returned.
-     *
-     * @param startWord - the word from which we wish to begin the
-     * search (String)
-     * @param endWord - the goal word, the end of the search (String)
-     * @return - a chain of word posts that can be traversed if the
-     * goal word is found, null otherwise (WordRec)
-     */
-    public WordRec breadthFirst(String startWord, String endWord) {
+/**
+ * BreadthFirst perform a BFS from startWord to find the shortest
+ * path to endWord. The shortest path will be returned as a chain
+ * of word posts (WordRec). If there is no path between the two
+ * words, null will be returned.
+ *
+ * @param startWord - the word from which we wish to begin the
+ * search (String)
+ * @param endWord - the goal word, the end of the search (String)
+ * @return - a chain of word posts that can be traversed if the
+ * goal word is found, null otherwise (WordRec)
+ */
+public WordRec breadthFirst(String startWord, String endWord) {
 	WordList.eraseUsed();
 	WordRec start = new WordRec(startWord, null);
 	WordList.markAsUsedIfUnused(startWord);
 	goalWord = endWord;
 	q.empty();
 	q.enqueue(start);
-	try {
-	    while (true) {
-		WordRec wr = makeChildren((WordRec) q.dequeue());
-		if (wr != null) {
-		    return wr;
-		}
-	    }
-	} catch (Exception e) {
-	    return null;
-	}
-    }
 
-    /**
-     * CheckAllStartWords finds the shortest path from any word to
-     * endWord. The longest of these shortest paths will be printed.
-     *
-     * @param endWord - the goal word, where we wish for all the paths
-     * to end
-     */
-    public void checkAllStartWords(String endWord) {
+	try {
+		while (!q.isEmpty()) {
+			WordRec wr = makeChildren((WordRec) q.dequeue());
+			if (wr != null) {
+				return wr;
+			}
+		}
+	} catch (Exception e) {
+		return null;
+	}
+	return null;
+}
+
+/**
+ * CheckAllStartWords finds the shortest path from any word to
+ * endWord. The longest of these shortest paths will be printed.
+ *
+ * @param endWord - the goal word, where we wish for all the paths
+ * to end
+ */
+public void checkAllStartWords(String endWord) {
 	int maxChainLength = 0;
 	WordRec maxChainRec = null;
-	for (int i = 0; i < WordList.size; i++) {
-	    WordRec x = breadthFirst(WordList.wordAt(i), endWord);
-	    if (x != null) {
-		int len = x.chainLength();
-		if (len > maxChainLength) {
-		    maxChainLength = len;
-		    maxChainRec = x;
-		    // x.PrintChain(); // skriv ut den hittills längsta kedjan
+
+	WordList.eraseUsed();
+	WordRec start = new WordRec(endWord, null);
+	WordList.markAsUsedIfUnused(endWord);
+	q.empty();
+	q.enqueue(start);
+
+	HashMap<String, WordRec> foundPaths = new HashMap<>();
+
+	try {
+		while (!q.isEmpty()) {
+			WordRec current = (WordRec) q.dequeue();ugueivu
+			
 		}
-	    }
+	}
+	
+	for (int i = 0; i < WordList.size; i++) {
+		WordRec x = breadthFirst(WordList.wordAt(i), endWord);
+		if (x != null) {
+			int len = x.chainLength();
+		}
+		if (len > maxChainLength) {
+			maxChainLength = len;
+			maxChainRec = x;
+			// x.PrintChain(); // skriv ut den hittills längsta kedjan
+		}
 	}
 	System.out.println(endWord + ": " + maxChainLength + " ord");
 	if (maxChainRec != null) {
-	    maxChainRec.printChain();
+		maxChainRec.printChain();
 	}
-    }
 }

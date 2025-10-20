@@ -1,4 +1,4 @@
-import java.util.Vector;
+import java.util.*;
 import java.io.*;
 
 /**
@@ -6,8 +6,9 @@ import java.io.*;
  * containing already used words.
  */
 class WordList {
-    static private Vector<String> list; // ordlista
-    static private Vector<String> used; // databas med använda ord
+    static private ArrayList<String> list; // ordlista
+    static private HashSet<String> listSet; // effektivare sätt att testa contains (O(N))
+    static private HashSet<String> used; // databas med använda ord
     static int wordLength;
     static int size; // antal ord i ordlistan
 
@@ -23,7 +24,8 @@ class WordList {
     static public void read(int wordLength_, BufferedReader input) throws IOException {
 	wordLength = wordLength_;
 	size = 0;
-	list = new Vector<String>();
+	list = new ArrayList<String>();
+    listSet = new HashSet<String>();
 	while (true) {
 	    String s = input.readLine();
 	    if (s.equals("#")) {
@@ -35,9 +37,10 @@ class WordList {
 				   wordLength + " tecken.");
 	    }
 	    list.add(s);
+        listSet.add(s);
 	    size++;
 	}
-	used = new Vector<String>(size);
+	used = new HashSet<String>(size);
     }
 
     /**
@@ -50,7 +53,7 @@ class WordList {
      */
     static public String wordAt(int index) {
 	if (index >= 0 && index < size) {
-	    return (String) list.elementAt(index);
+	    return list.get(index);
 	}
 	return null;
     }
@@ -64,7 +67,7 @@ class WordList {
      * (String)
      */
     static public String contains(String w) {
-	if (list.contains(w)) {
+	if (listSet.contains(w)) {
 	    return w;
 	}
 	return null;
