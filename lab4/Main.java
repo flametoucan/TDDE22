@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.InputStreamReader;
 
 /**
@@ -13,7 +14,13 @@ public class Main
 	// Create a buffered reader for the user input.
 	BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
 	// Build the word list.
-	WordList.read(WordLength, stdin);
+	BufferedReader reader;
+	if (args.length > 0) {
+		reader = new BufferedReader(new FileReader(args[0]));
+	} else {
+		reader = new BufferedReader(new InputStreamReader(System.in));
+	}
+	WordList.read(WordLength, reader);
 	LongestChain lc = new LongestChain(WordLength);
 	while (true) {
 	    // Get a start word and an end word, or just an end word.
