@@ -1,0 +1,4 @@
+Skriv en kort reflektion över de förändringar du har gjort. 
+
+Vilken version är bättre?
+Den nya versionen är generellt sätt bättre då den inte tvingar programmet att bygga ihop heapen vid varje uttag, detta görs genom att lägga värdet sist i arrayen och sedan använda swim() tills heap-egenskapen är återställd. Detta gör programmet mer effektivt och trots att tidskomplexiteten på insättningar går från O(1) till O(log(n)) och tidskomplexiteten för uttag fortsätter vara O(n) och denna effektivisering kommer bara ifrån att heapen inte behövde byggas om varje gång ett uttag görs. de enda gångerna den gamla koden är snabbare är när man har manga insättningar och sedan få uttag, då insättningen är var lite snabbare förut men uttagen är långsammare nu, en sådan simulering är dock rätt orymlig att hitta då det är som att spara massor onödigt brevid det du faktiskt kollar på.
