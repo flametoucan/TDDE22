@@ -1,0 +1,42 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch with Arguments Prompt",
+            "request": "launch",
+            "mainClass": "",
+            "args": "data/input3200.txt"
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Simulator",
+            "request": "launch",
+            "mainClass": "Simulator",
+            "projectName": "Lab2.5_c18c2271"
+        },
+        {
+            "type": "java",
+            "name": "StdDraw",
+            "request": "launch",
+            "mainClass": "StdDraw",
+            "projectName": "Lab2.5_c18c2271"
+        },
+        {
+            "type": "java",
+            "name": "TestMinPQ",
+            "request": "launch",
+            "mainClass": "TestMinPQ",
+            "projectName": "Lab2.5_c18c2271"
+        }
+    ]
+}

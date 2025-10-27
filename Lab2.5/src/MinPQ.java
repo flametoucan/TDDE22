@@ -1,8 +1,5 @@
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 /**
  * A heap based priority queue where the root is the smallest element
@@ -77,8 +74,13 @@ public class MinPQ<Key_Class> {
      * @param  x the key to be added to the queue.
      */
     public void insert(Key_Class x) {
-	throw new MinPQError("Insert needs to be implemented!");
+    if (count == pq.length - 1) { //se om heapen är full, om ja dubbel storlek
+        resize(2 * pq.length);
     }
+    pq[++count] = x; //lägg in element på nästa lediga plats
+    swim(count); //swimma upp tills heapen är sorterad
+    assert isMinHeap();
+}
 
     /**
      * Remove and return the smallest key in the queue.
